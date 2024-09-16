@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Messages</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #messages {
+            margin-top: 20px;
+        }
+
+        .message {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+            .message strong {
+                display: block;
+            }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Сообщения</h1>
+        <div id="messages"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/messageHub")
+            .build();
+
+        // Обработчик для получения сообщения от SignalR
+        connection.on("ReceiveMessage", function (message) {
+            console.log("Received message:", message);
+
+            // Создаем элемент для нового сообщения
+            const messageElement = document.createElement("div");
+            messageElement.className = "message bg-light";
+            messageElement.innerHTML = `
+                    <strong>Content:</strong> ${message.content} <br>
+                    <strong>Timestamp:</strong> ${new Date(message.timestamp).toLocaleString()} <br>
+                    <strong>SequenceNumber:</strong> ${message.sequenceNumber}
+                `;
+
+            // Добавляем новое сообщение в контейнер
+            document.getElementById("messages").appendChild(messageElement);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+    </script>
+</body>
+</html>

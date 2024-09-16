@@ -1,0 +1,25 @@
+services:
+  backend:
+    image: ${DOCKER_REGISTRY-}testtaskapi
+    build:
+      context: .
+      dockerfile: TestTaskApi/Dockerfile
+
+  database:
+    image: postgres:latest
+    container_name: database
+    environment:
+        - POSTGRES_DB=TestTaskBd2
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=root
+    volumes:
+        - ./.containers/testTask-db:/var/lib/postgresql/data
+    ports:
+        - 5432:5432
+
+  client:
+    image: client
+    build:
+        context: ./testtaskapi-client
+        dockerfile: Dockerfile
+    

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages in last 10 min</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #messages {
+            margin-top: 20px;
+        }
+
+        .message {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+            .message strong {
+                display: block;
+            }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Сообщения за последние 10 минут</h1>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        fetchMessages();
+
+        async function fetchMessages() {
+            try {
+                const response = await fetch('/api/Message/all');
+                if (response.ok) {
+                    const messages = await response.json();
+                    const messagesContainer = document.getElementById('messages');
+                    messagesContainer.innerHTML = '';
+                    messages.forEach(message => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'message bg-light';
+                        messageDiv.innerHTML = `
+                                <strong>Timestamp:</strong> ${new Date(message.timestamp).toLocaleString()} <br>
+                                <strong>Content:</strong> ${message.content}
+                            `;
+                        messagesContainer.appendChild(messageDiv);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+            }
+        }
+    </script>
+</body>
+</html>
+

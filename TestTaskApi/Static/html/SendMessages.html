@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Messages</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #response {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Send a Message</h1>
+        <form id="messageForm" class="mb-4">
+            <div class="form-group">
+                <input type="text" id="messageContent" class="form-control" placeholder="Enter your message" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+        <div id="response" class="alert" role="alert"></div>
+    </div>
+
+    <script>
+        document.getElementById('messageForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const content = document.getElementById('messageContent').value;
+
+            if (content.length > 128) {
+                const responseElement = document.getElementById('response');
+                responseElement.className = 'alert alert-danger';
+                responseElement.innerText = 'Сообщение не может превышать 128 символов.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/Message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ Content: content })
+                });
+
+                const responseElement = document.getElementById('response');
+                if (response.ok) {
+                    responseElement.className = 'alert alert-success';
+                    responseElement.innerText = 'Message sent successfully!';
+                } else {
+                    responseElement.className = 'alert alert-danger';
+                    responseElement.innerText = 'Failed to send message.';
+                }
+            } catch (error) {
+                const responseElement = document.getElementById('response');
+                responseElement.className = 'alert alert-danger';
+                responseElement.innerText = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+services:
+  backend:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+    ports:
+      - "5000:80"
+   
+  client:
+    ports:
+        - "5001:3000"
+    

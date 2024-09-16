@@ -1,0 +1,54 @@
+.containers
+
+# Visual Studio files
+.vs/
+*.sln
+*.user
+*.userprefs
+*.ncb
+*.sdf
+*.opensdf
+*.cache
+
+# Build directories
+bin/
+obj/
+
+# Packages
+*.nupkg
+# Uncomment if using NuGet packages
+# packages/*
+
+# Visual Studio Code
+.vscode/
+.history/
+
+# ReSharper files
+_ReSharper*/
+*.DotSettings
+
+# Logs
+*.log
+
+# Test results
+TestResults/
+*.TestResults.xml
+
+# Environment variables
+*.env
+*.env.local
+
+# Database files (if using SQLite)
+*.db
+
+# Azure Functions
+local.settings.json
+
+# macOS Finder files
+.DS_Store
+
+# Windows thumbnail cache files
+Thumbs.db
+
+# Coverage results
+coverage/
